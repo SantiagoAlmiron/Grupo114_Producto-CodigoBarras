@@ -24,6 +24,16 @@ public class CodigoDeBarras {
         this.Producto = Producto;
         borrado = false;
     }
+    
+    public void setBorrado(boolean borrado) {
+        this.borrado = borrado;
+    }
+    
+    public int getCodigoDeBarrasId() { return idCodigoDeBarras; }
+    
+    public String getCodigo() { return codigo; }
+
+    public boolean isBorrado() { return borrado; }
 
     @Override
     public String toString() {

@@ -1,0 +1,3 @@
+java 23.0.2
+MySQL 8.0.43
+mysql-connector-j-9.4.0

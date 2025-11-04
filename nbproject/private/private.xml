@@ -3,15 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/santiago/NetBeansProjects/Grupo114_Producto-CodigoBarras/src/grupo114_producto/codigobarras/Grupo114_ProductoCodigoBarras.java</file>
-            <file>file:/home/santiago/NetBeansProjects/Grupo114_Producto-CodigoBarras/src/services/Tiempo.java</file>
-            <file>file:/home/santiago/NetBeansProjects/Grupo114_Producto-CodigoBarras/src/entities/Producto.java</file>
             <file>file:/home/santiago/NetBeansProjects/Grupo114_Producto-CodigoBarras/src/services/ProductoService.java</file>
-            <file>file:/home/santiago/NetBeansProjects/Grupo114_Producto-CodigoBarras/src/entities/CodigoDeBarras.java</file>
+            <file>file:/home/santiago/NetBeansProjects/Grupo114_Producto-CodigoBarras/src/dao/GenericDao.java</file>
+            <file>file:/home/santiago/NetBeansProjects/Grupo114_Producto-CodigoBarras/src/dao/ProductoDaoJdbc.java</file>
+            <file>file:/home/santiago/NetBeansProjects/Grupo114_Producto-CodigoBarras/src/entities/Producto.java</file>
             <file>file:/home/santiago/NetBeansProjects/Grupo114_Producto-CodigoBarras/src/services/CodigoDeBarrasService.java</file>
             <file>file:/home/santiago/NetBeansProjects/Grupo114_Producto-CodigoBarras/src/grupo114_producto/codigobarras/AppMenu.java</file>
-            <file>file:/home/santiago/NetBeansProjects/Grupo114_Producto-CodigoBarras/src/config/Configuraciones.java</file>
-            <file>file:/home/santiago/NetBeansProjects/Grupo114_Producto-CodigoBarras/src/config/coneccion.java</file>
         </group>
     </open-files>
 </project-private>

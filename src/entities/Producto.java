@@ -21,9 +21,6 @@ public class Producto {
     private CodigoDeBarras codigoDeBarras;
     private boolean borrado;
 
-    // Servicio inyectado (puede venir de fuera o ser estático compartido)
-    private static CodigoDeBarrasService codigoDeBarrasService = new CodigoDeBarrasService();
-
     public Producto(int id, String nombre, String descripcion, int stock, double precio) {
         this.idProducto = id;
         this.nombre = nombre;
@@ -31,15 +28,14 @@ public class Producto {
         this.stock = stock;
         this.precio = precio;
         this.borrado = false;
-
-        // Usa el servicio para crear el código de barras
-        String valorCodigo = generarCodigoDeBarrasUnico();
-        this.codigoDeBarras = codigoDeBarrasService.crear(valorCodigo, this);
     }
-
-    /** Permite inyectar un servicio diferente si se necesita (por ejemplo en tests) */
-    public static void setCodigoDeBarrasService(CodigoDeBarrasService service) {
-        codigoDeBarrasService = service;
+    
+    public Producto(String nombre, String descripcion, int stock, double precio) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.stock = stock;
+        this.precio = precio;
+        this.borrado = false;
     }
 
     /** Genera un valor de código de barras único (puedes ajustar la lógica según tus reglas) */
@@ -48,11 +44,21 @@ public class Producto {
     }
 
     // --- Setters ---
+    public void setIdProducto(int idProducto) { this.idProducto = idProducto; }
     public void setNombre(String nombre) { this.nombre = nombre; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
     public void setStock(int stock) { this.stock = stock; }
     public void setPrecio(double precio) { this.precio = precio; }
     public void setBorrado(boolean borrado) { this.borrado = borrado; }
+    public void setCodigoDeBarras(CodigoDeBarras codigo) {
+    this.codigoDeBarras = codigo;
+    
+    if (codigo != null && codigo.getProducto() != this) {
+        // Mantenemos consistencia bidireccional
+        codigo.setProducto(this);
+    }
+}
+
 
     // --- Getters ---
     public int getIdProducto() { return idProducto; }

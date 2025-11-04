@@ -4,145 +4,126 @@
  */
 package services;
 
-/**
- *
- * @author santiago
- */
 import config.Conexion;
+import dao.ProductoDaoJdbc;
 import entities.Producto;
+import entities.CodigoDeBarras;
 
-import java.sql.*;
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
 public class ProductoService {
 
-    // ✅ Nombre de la tabla como constante
-    private static final String TABLA = "producto";
+    private final ProductoDaoJdbc productoDao = new ProductoDaoJdbc();
+    private final CodigoDeBarrasService codigoService = new CodigoDeBarrasService();
 
-    // ✅ Crear producto
+    // ✅ Crear producto + código de barras
     public Producto crear(String nombre, String descripcion, int stock, double precio) {
-        String sql = "INSERT INTO " + TABLA + " (nombre, descripcion, stock, precio, borrado) VALUES (?, ?, ?, ?, FALSE)";
-        try (Connection conn = Conexion.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conn = Conexion.getConnection()) {
+            conn.setAutoCommit(false); // Inicio transacción
 
-            stmt.setString(1, nombre);
-            stmt.setString(2, descripcion);
-            stmt.setInt(3, stock);
-            stmt.setDouble(4, precio);
+            // 1) Crear producto
+            Producto nuevo = new Producto(nombre, descripcion, stock, precio);
+            productoDao.crear(nuevo, conn); // Ahora nuevo tiene ID
 
-            int rows = stmt.executeUpdate();
-            if (rows > 0) {
-                ResultSet rs = stmt.getGeneratedKeys();
-                if (rs.next()) {
-                    int idGenerado = rs.getInt(1);
-                    return new Producto(idGenerado, nombre, descripcion, stock, precio);
-                }
-            }
+            // 2) Crear código de barras usando el ID real
+            String valorCodigo = "PROD-" + nuevo.getIdProducto() + "-" + System.currentTimeMillis();
+            codigoService.crear(valorCodigo, nuevo, conn); // Asigna en memoria también
+
+            // ✅ Transacción OK
+            conn.commit();
+            System.out.println("✅ Producto y código de barras creados correctamente. ID Producto: " + nuevo.getIdProducto());
+            return nuevo;
 
         } catch (SQLException e) {
-            System.err.println("❌ Error al crear el producto:");
+            System.err.println("❌ Error al crear producto + código (rollback): " + e.getMessage());
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
-    // ✅ Obtener todos los productos (máximo 10)
+    // ✅ Obtener todos los productos
     public List<Producto> getAll() {
-        List<Producto> productos = new ArrayList<>();
-        String sql = "SELECT * FROM " + TABLA + " WHERE borrado = FALSE LIMIT 10";
-
-        try (Connection conn = Conexion.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-
-            while (rs.next()) {
-                Producto p = new Producto(
-                        rs.getInt("id_producto"),
-                        rs.getString("nombre"),
-                        rs.getString("descripcion"),
-                        rs.getInt("stock"),
-                        rs.getDouble("precio")
-                );
-                p.setBorrado(rs.getBoolean("borrado"));
-                productos.add(p);
-            }
-
+        try (Connection conn = Conexion.getConnection()) {
+            return productoDao.leerTodos(conn);
         } catch (SQLException e) {
-            System.err.println("❌ Error al obtener productos:");
+            System.err.println("❌ Error al obtener productos: " + e.getMessage());
             e.printStackTrace();
+            return List.of();
         }
-
-        return productos;
     }
 
     // ✅ Buscar producto por ID
     public Optional<Producto> getById(int id) {
-        String sql = "SELECT * FROM " + TABLA + " WHERE id_producto = ? AND borrado = FALSE";
-
-        try (Connection conn = Conexion.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                Producto p = new Producto(
-                        rs.getInt("id_producto"),
-                        rs.getString("nombre"),
-                        rs.getString("descripcion"),
-                        rs.getInt("stock"),
-                        rs.getDouble("precio")
-                );
-                p.setBorrado(rs.getBoolean("borrado"));
-                return Optional.of(p);
-            }
-
+        try (Connection conn = Conexion.getConnection()) {
+            return productoDao.leerPorIdConCodigo(id, conn);
         } catch (SQLException e) {
-            System.err.println("❌ Error al buscar producto por ID:");
+            System.err.println("❌ Error al buscar producto por ID: " + e.getMessage());
             e.printStackTrace();
+            return Optional.empty();
         }
-
-        return Optional.empty();
     }
 
     // ✅ Actualizar producto
     public boolean actualizar(int id, String nuevoNombre, double nuevoPrecio) {
-        String sql = "UPDATE " + TABLA + " SET nombre = ?, precio = ? WHERE id_producto = ? AND borrado = FALSE";
+        try (Connection conn = Conexion.getConnection()) {
+            conn.setAutoCommit(false);
 
-        try (Connection conn = Conexion.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            Optional<Producto> opt = productoDao.leerPorId(id, conn);
+            if (opt.isEmpty()) {
+                System.err.println("⚠️ Producto no encontrado ID: " + id);
+                return false;
+            }
 
-            stmt.setString(1, nuevoNombre);
-            stmt.setDouble(2, nuevoPrecio);
-            stmt.setInt(3, id);
+            Producto p = opt.get();
+            p.setNombre(nuevoNombre);
+            p.setPrecio(nuevoPrecio);
 
-            return stmt.executeUpdate() > 0;
+            boolean actualizado = productoDao.actualizar(p, conn);
+            conn.commit();
+
+            if (actualizado) {
+                System.out.println("✅ Producto actualizado correctamente.");
+            } else {
+                System.out.println("⚠️ No se pudo actualizar el producto.");
+            }
+
+            return actualizado;
 
         } catch (SQLException e) {
-            System.err.println("❌ Error al actualizar producto:");
+            System.err.println("❌ Error al actualizar producto: " + e.getMessage());
             e.printStackTrace();
+            return false;
         }
-
-        return false;
     }
 
-    // ✅ Marcar producto como borrado (soft delete)
+    // ✅ Baja lógica de producto + código de barras
     public boolean eliminar(int id) {
-        String sql = "UPDATE " + TABLA + " SET borrado = TRUE WHERE id_producto = ?";
+        try (Connection conn = Conexion.getConnection()) {
+            conn.setAutoCommit(false);
 
-        try (Connection conn = Conexion.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            // 1) Baja lógica código de barras
+            codigoService.eliminarPorProductoId(id, conn);
 
-            stmt.setInt(1, id);
-            return stmt.executeUpdate() > 0;
+            // 2) Baja lógica producto
+            boolean eliminado = productoDao.eliminar(id, conn);
+
+            conn.commit();
+
+            if (eliminado) {
+                System.out.println("✅ Producto y su código de barras eliminados lógicamente.");
+            } else {
+                System.out.println("⚠️ No se encontró el producto para eliminar.");
+            }
+
+            return eliminado;
 
         } catch (SQLException e) {
-            System.err.println("❌ Error al eliminar producto:");
+            System.err.println("❌ Error al eliminar producto + código: " + e.getMessage());
             e.printStackTrace();
+            return false;
         }
-
-        return false;
     }
 }

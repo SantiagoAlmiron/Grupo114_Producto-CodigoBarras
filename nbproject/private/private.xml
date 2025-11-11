@@ -6,9 +6,11 @@
             <file>file:/home/santiago/NetBeansProjects/Grupo114_Producto-CodigoBarras/src/services/ProductoService.java</file>
             <file>file:/home/santiago/NetBeansProjects/Grupo114_Producto-CodigoBarras/src/dao/GenericDao.java</file>
             <file>file:/home/santiago/NetBeansProjects/Grupo114_Producto-CodigoBarras/src/dao/ProductoDaoJdbc.java</file>
+            <file>file:/home/santiago/NetBeansProjects/Grupo114_Producto-CodigoBarras/src/entities/CodigoDeBarras.java</file>
             <file>file:/home/santiago/NetBeansProjects/Grupo114_Producto-CodigoBarras/src/entities/Producto.java</file>
             <file>file:/home/santiago/NetBeansProjects/Grupo114_Producto-CodigoBarras/src/services/CodigoDeBarrasService.java</file>
             <file>file:/home/santiago/NetBeansProjects/Grupo114_Producto-CodigoBarras/src/grupo114_producto/codigobarras/AppMenu.java</file>
+            <file>file:/home/santiago/NetBeansProjects/Grupo114_Producto-CodigoBarras/src/dao/CodigoDeBarrasDaoJdbc.java</file>
         </group>
     </open-files>
 </project-private>

@@ -11,11 +11,9 @@ import java.time.ZoneId;
  * @author santiago
  */
 public class Tiempo { 
-    private static ZoneId SetTimeZone() {
-        return ZoneId.of("America/Argentina/Buenos_Aires");
-    }
-    
+    public static final ZoneId TIMEZONE = ZoneId.of("America/Argentina/Buenos_Aires");
+
     public static ZonedDateTime ahora() {
-        return ZonedDateTime.now(SetTimeZone());
+        return ZonedDateTime.now(TIMEZONE);
     }
 }

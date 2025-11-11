@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package grupo114_producto.codigobarras;
 
 import entities.Producto;
@@ -48,23 +44,53 @@ public class AppMenu {
         System.out.print("Seleccione una opción: ");
     }
 
+    // Métodos de entrada segura
+    private int leerEntero(String mensaje) {
+        while (true) {
+            try {
+                System.out.print(mensaje);
+                return Integer.parseInt(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Error: ingrese un número entero válido.");
+            }
+        }
+    }
+
+    private double leerDouble(String mensaje) {
+        while (true) {
+            try {
+                System.out.print(mensaje);
+                return Double.parseDouble(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Error: ingrese un número decimal válido.");
+            }
+        }
+    }
+
+    private String leerTexto(String mensaje) {
+        while (true) {
+            System.out.print(mensaje);
+            String entrada = scanner.nextLine().trim();
+            if (!entrada.isEmpty()) {
+                return entrada;
+            }
+            System.out.println("Error: el texto no puede estar vacío.");
+        }
+    }
+
     private void crearProducto() {
-        System.out.print("Nombre: ");
-        String nombre = scanner.nextLine();
+        String nombre = leerTexto("Nombre: ");
+        String descripcion = leerTexto("Descripción: ");
+        int stock = leerEntero("Stock: ");
+        double precio = leerDouble("Precio: ");
 
-        System.out.print("Descripción: ");
-        String descripcion = scanner.nextLine();
-
-        System.out.print("Stock: ");
-        int stock = Integer.parseInt(scanner.nextLine());
-
-        System.out.print("Precio: ");
-        double precio = Double.parseDouble(scanner.nextLine());
-
-        // Ahora Producto se encarga de crear su propio Código de Barras a través del servicio
         Producto p = productoService.crear(nombre, descripcion, stock, precio);
 
-        System.out.println("✅ Producto creado: " + p);
+        if (p != null) {
+            System.out.println("Producto creado: " + p);
+        } else {
+            System.out.println("No se pudo crear el producto.");
+        }
     }
 
     private void listarProductos() {
@@ -73,36 +99,27 @@ public class AppMenu {
     }
 
     private void actualizarProducto() {
-        System.out.print("Ingrese ID del producto: ");
-        int id = Integer.parseInt(scanner.nextLine());
+        int id = leerEntero("Ingrese ID del producto: ");
+        String nombre = leerTexto("Nuevo nombre: ");
+        double precio = leerDouble("Nuevo precio: ");
 
-        System.out.print("Nuevo nombre: ");
-        String nombre = scanner.nextLine();
-
-        System.out.print("Nuevo precio: ");
-        double precio = Double.parseDouble(scanner.nextLine());
-
-        boolean ok = productoService.actualizar(id, nombre, precio);
-        System.out.println(ok ? "✅ Actualizado correctamente." : "❌ Producto no encontrado.");
+        boolean actualizado = productoService.actualizar(id, nombre, precio);
+        System.out.println(actualizado ? "Producto actualizado correctamente." : "Producto no encontrado.");
     }
 
     private void eliminarProducto() {
-        System.out.print("Ingrese ID del producto: ");
-        int id = Integer.parseInt(scanner.nextLine());
+        int id = leerEntero("Ingrese ID del producto: ");
 
-        boolean ok = productoService.eliminar(id);
-        System.out.println(ok ? "🗑️ Eliminado lógicamente." : "❌ Producto no encontrado.");
+        boolean eliminado = productoService.eliminar(id);
+        System.out.println(eliminado ? "Producto eliminado lógicamente." : "Producto no encontrado.");
     }
 
     private void buscarProductoPorId() {
-        System.out.print("Ingrese ID del producto: ");
-        int id = Integer.parseInt(scanner.nextLine());
+        int id = leerEntero("Ingrese ID del producto: ");
 
         productoService.getById(id).ifPresentOrElse(
-                p -> System.out.println("🔍 Encontrado: " + p),
-                () -> System.out.println("❌ No existe un producto con ese ID.")
+                p -> System.out.println("Producto encontrado: " + p),
+                () -> System.out.println("No existe un producto con ese ID.")
         );
     }
 }
-
-

@@ -13,7 +13,7 @@ public class seguridad {
         consultaSegura();
     }
 
-    // 🏗️ Crear base y tablas si no existen
+    //️ Crear base y tablas si no existen
     private static void crearTablas() {
         try (Connection conn = coneccion.getConnection();
              Statement stmt = conn.createStatement()) {
@@ -54,7 +54,7 @@ public class seguridad {
         }
     }
 
-    // 👤 Crear usuario con privilegios mínimos
+    // Crear usuario con privilegios mínimos
     private static void crearUsuarioLimitado() {
         try (Connection conn = coneccion.getConnection();
              Statement stmt = conn.createStatement()) {
@@ -86,7 +86,7 @@ public class seguridad {
                 FROM CodigoBarras
             """);
 
-            System.out.println("✅ Vistas creadas correctamente.\n");
+            System.out.println("Vistas creadas correctamente.\n");
         } catch (SQLException e) {
             e.printStackTrace();
         }

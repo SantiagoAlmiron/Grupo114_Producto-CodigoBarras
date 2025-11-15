@@ -1,11 +1,12 @@
+
 [README.md](https://github.com/user-attachments/files/23554784/README.md)
 
 [Informe](https://drive.google.com/drive/folders/1WFV2twfzVmcbaicEgzlbB7V5q2kvYao4)
 
+[Video]('#')
+
 # Sistema de Inventario — README Oficial
-
 Este proyecto implementa un **sistema de inventario básico** desarrollado en **Java + MySQL**, con soporte para:
-
 - Gestión de productos  
 - Generación automática de códigos de barras  
 - Consultas avanzadas (JOIN, GROUP BY, vistas)  
@@ -13,7 +14,19 @@ Este proyecto implementa un **sistema de inventario básico** desarrollado en **
 - Simulación de concurrencia con deadlocks  
 - Seguridad (usuario con mínimos privilegios, vistas seguras, SQL parametrizado)
 
----
+# 📌 Descripción del Dominio
+El dominio elegido es un **sistema de inventario para pequeñas y medianas empresas**.  
+Permite administrar productos mediante operaciones básicas (CRUD), controlar existencias, generar códigos de barras, validar reglas de negocio y ejecutar consultas avanzadas para análisis de inventario.  
+El sistema está pensado para entornos académicos y productivos simples, donde se necesita:  
+- Registrar productos  
+- Mantener un stock consistente  
+- Consultar existencia y valor de inventario  
+- Probar concurrencia simulada y restricciones  
+- Practicar buenas prácticas de seguridad en SQL  
+El propósito central es ofrecer un proyecto educativo robusto y realista sobre **Java + MySQL + JDBC**, aplicando patrones, transacciones y roles con mínimos privilegios.
+
+## UML
+<img width="988" height="552" alt="image" src="https://github.com/user-attachments/assets/35c377e3-db65-4b52-ab03-902fb682f167" />
 
 #1. Requisitos
 

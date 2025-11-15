@@ -20,7 +20,6 @@ public class CodigoDeBarrasDaoJdbc implements GenericDao<CodigoDeBarras> {
 
             stmt.setString(1, codigo.getCodigo());
 
-            // ZonedDateTime -> Timestamp
             Timestamp ts = Timestamp.from(codigo.getFechaCreacion().toInstant());
             stmt.setTimestamp(2, ts);
 
@@ -31,8 +30,6 @@ public class CodigoDeBarrasDaoJdbc implements GenericDao<CodigoDeBarras> {
 
             try (ResultSet rs = stmt.getGeneratedKeys()) {
                 if (rs.next()) {
-                    // Si querés setear el id en la entidad, agregá un setter en tu clase CódigoDeBarras
-                    // codigo.setIdCodigoDeBarras(rs.getInt(1));
                 }
             }
         }

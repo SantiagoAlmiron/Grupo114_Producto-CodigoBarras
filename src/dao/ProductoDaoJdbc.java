@@ -109,7 +109,7 @@ public class ProductoDaoJdbc implements GenericDao<Producto> {
 
         if (optCodigo.isPresent()) {
             CodigoDeBarras codigo = optCodigo.get();
-            p.setCodigoDeBarras(codigo); // ✅ Enlaza bidireccionalmente
+            p.setCodigoDeBarras(codigo);
         }
 
         return Optional.of(p);

@@ -38,7 +38,6 @@ public class Producto {
         this.borrado = false;
     }
 
-    /** Genera un valor de código de barras único (puedes ajustar la lógica según tus reglas) */
     private String generarCodigoDeBarrasUnico() {
         return "PROD-" + idProducto + "-" + System.currentTimeMillis();
     }
@@ -54,7 +53,6 @@ public class Producto {
     this.codigoDeBarras = codigo;
     
     if (codigo != null && codigo.getProducto() != this) {
-        // Mantenemos consistencia bidireccional
         codigo.setProducto(this);
     }
 }

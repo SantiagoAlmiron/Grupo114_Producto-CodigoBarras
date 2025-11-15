@@ -33,7 +33,6 @@ public class CodigoDeBarras {
     public void setProducto(Producto producto) {
     this.producto = producto;
 
-    // Si asignamos producto, aseguramos relación bidireccional
     if (producto != null && producto.getCodigoDeBarras() != this) {
         producto.setCodigoDeBarras(this);
     }

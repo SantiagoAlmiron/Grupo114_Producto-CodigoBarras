@@ -1,4 +1,7 @@
 [README.md](https://github.com/user-attachments/files/23554784/README.md)
+
+[Informe](https://drive.google.com/drive/folders/1WFV2twfzVmcbaicEgzlbB7V5q2kvYao4)
+
 # Sistema de Inventario — README Oficial
 
 Este proyecto implementa un **sistema de inventario básico** desarrollado en **Java + MySQL**, con soporte para:

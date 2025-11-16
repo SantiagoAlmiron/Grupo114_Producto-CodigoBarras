@@ -3,7 +3,7 @@
 
 [Informe](https://drive.google.com/drive/folders/1WFV2twfzVmcbaicEgzlbB7V5q2kvYao4)
 
-[Video]('#')
+[Video](https://www.youtube.com/watch?v=97VeXGVqqCc)
 
 # Sistema de Inventario — README Oficial
 Este proyecto implementa un **sistema de inventario básico** desarrollado en **Java + MySQL**, con soporte para:
